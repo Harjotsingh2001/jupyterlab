@@ -1,0 +1,41 @@
+name: DevSecOps Code Quality and Security Scan
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build_and_scan:
+    name: Build, Install and SonarCloud Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ⬇️ Checkout Code
+        uses: actions/checkout@v4
+        with:
+          # Crucial for SonarQube's deep analysis
+          fetch-depth: 0 
+
+      - name: ⚙️ Setup Node.js Environment
+        # Set up the JavaScript/TypeScript environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 📦 Install Project Dependencies
+        # Install packages before scanning
+        run: npm install
+
+      - name: 🛡️ SonarCloud Analysis (DevSecOps Step)
+        # The mandatory security scan
+        uses: SonarSource/sonarcloud-github-action@v2.4.0 
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
+        with:
+          args: >
+            -Dsonar.organization=YOUR_SONARCLOUD_ORGANIZATION_KEY 
+            -Dsonar.projectKey=YOUR_SONARCLOUD_PROJECT_KEY
