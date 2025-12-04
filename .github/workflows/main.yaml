@@ -1,38 +1,96 @@
-name: DevSecOps Code Quality and Security Scan
+# name: DevSecOps Code Quality and Security Scan
+
+# on:
+#   push:
+#     branches:
+#       - main
+#   pull_request:
+#     types: [opened, synchronize, reopened]
+
+# jobs:
+#   build_and_scan:
+#     name: Build, Install and SonarCloud Scan
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: ⬇️ Checkout Code
+#         uses: actions/checkout@v4
+#         with:
+#           # Crucial for SonarQube's deep analysis
+#           fetch-depth: 0 
+
+#       - name: ⚙️ Setup Node.js Environment
+#         # Set up the JavaScript/TypeScript environment
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: '20'
+
+#       - name: 📦 Install Project Dependencies
+#         # Install packages before scanning
+#         run: npm install --legacy-peer-deps --ignore-scripts
+
+#       - name: 🛡️ SonarCloud Analysis (DevSecOps Step)
+#         # The mandatory security scan
+#         uses: SonarSource/sonarcloud-github-action@v2
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
+       
+name: DevSecOps CI Pipeline for JupyterLab
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   pull_request:
-    types: [opened, synchronize, reopened]
+    branches: [ main ]
 
 jobs:
-  build_and_scan:
-    name: Build, Install and SonarCloud Scan
+  devsecops_scan:
+    name: Build, Analyze & Secure JupyterLab
     runs-on: ubuntu-latest
 
     steps:
-      - name: ⬇️ Checkout Code
+      - name: ⬇️ Checkout Source Code
         uses: actions/checkout@v4
         with:
-          # Crucial for SonarQube's deep analysis
-          fetch-depth: 0 
+          fetch-depth: 0
 
-      - name: ⚙️ Setup Node.js Environment
-        # Set up the JavaScript/TypeScript environment
+      # ---------------- PYTHON ----------------
+      - name: 🐍 Setup Python Environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 📦 Install Python Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt || true
+
+      - name: 🔐 Python SAST Scan (Bandit)
+        run: |
+          pip install bandit
+          bandit -r . -x tests || true
+
+      # ---------------- NODE ----------------
+      - name: ⚙️ Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
 
-      - name: 📦 Install Project Dependencies
-        # Install packages before scanning
-        run: npm install --legacy-peer-deps --ignore-scripts
+      - name: 📦 Install Node Dependencies
+        run: npm install --legacy-peer-deps
 
-      - name: 🛡️ SonarCloud Analysis (DevSecOps Step)
-        # The mandatory security scan
+      - name: 🔥 Dependency Vulnerability Scan (npm audit)
+        run: npm audit --audit-level=high || true
+
+      - name: 🏗️ Build JupyterLab
+        run: |
+          npm run build || jlpm build
+
+      # ---------------- SONARCLOUD ----------------
+      - name: 🛡️ SonarCloud Code Quality & Security Scan
         uses: SonarSource/sonarcloud-github-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
-       
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
