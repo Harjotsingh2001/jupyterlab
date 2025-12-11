@@ -13,18 +13,18 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Checkout Code
-        # Gitleaks needs the full Git history to check for leaked secrets,
-        # so we fetch the entire history with fetch-depth: 0
+      - name: Checkout Code and History
+        # Crucial for Gitleaks: fetch-depth: 0 ensures the entire Git history is downloaded
+        # so Gitleaks can find secrets committed in the past.
         uses: actions/checkout@v4
         with:
           fetch-depth: 0 
           
-      - name: 🔐 Run Gitleaks Scan
+      - name: 🔐 Run Gitleaks Scan (OSS SAST)
         uses: zricethezav/gitleaks-action@v10
         with:
-          # Use the configuration file you created
+          # Tells Gitleaks to use the custom YAML configuration file
           config: .gitleaks.yaml 
-        # Crucial for the assignment: Allow the pipeline to finish 
-        # even if a secret is found, so you get the data.
+        # continue-on-error: true ensures the pipeline completes, even if a secret is found, 
+        # so you get your data for the presentation.
         continue-on-error: true
