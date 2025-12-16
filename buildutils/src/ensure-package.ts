@@ -213,7 +213,7 @@ export async function ensurePackage(
   }
 
   const names = Array.from(new Set(imports))
-    .sort()
+    .sort((a, b) => a.localeCompare(b))
     .map(name => {
       const parts = name.split('/');
       if (name.indexOf('@') === 0) {
@@ -755,8 +755,8 @@ export async function ensureUiComponents(
   });
 
   // sort the statements and then join them
-  const svgImportStatements = _svgImportStatements.sort().join('\n');
-  const labiconConstructions = _labiconConstructions.sort().join('\n');
+  const svgImportStatements = _svgImportStatements.sort((a, b) => a.localeCompare(b)).join('\n');
+  const labiconConstructions = _labiconConstructions.sort((a, b) => a.localeCompare(b)).join('\n');
 
   // generate the actual contents of the iconImports file
   const iconImportsPath = path.join(iconSrcDir, 'iconimports.ts');
@@ -791,8 +791,8 @@ export async function ensureUiComponents(
   });
 
   // sort the statements and then join them
-  const iconCSSUrls = _iconCSSUrls.sort().join('\n');
-  const iconCSSDeclarations = _iconCSSDeclarations.sort().join('\n\n');
+  const iconCSSUrls = _iconCSSUrls.sort((a, b) => a.localeCompare(b)).join('\n');
+  const iconCSSDeclarations = _iconCSSDeclarations.sort((a, b) => a.localeCompare(b)).join('\n\n');
 
   // generate the actual contents of the iconCSSClasses file
   const iconCSSClassesPath = path.join(iconCSSDir, 'deprecated.css');
