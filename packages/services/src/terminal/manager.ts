@@ -235,7 +235,7 @@ export class TerminalManager extends BaseManager implements Terminal.IManager {
       return;
     }
 
-    const names = models.map(({ name }) => name).sort();
+    const names = models.map(({ name }) => name).sort((a, b) => a.localeCompare(b));
     if (names === this._names) {
       // Identical models list, so just return
       return;
