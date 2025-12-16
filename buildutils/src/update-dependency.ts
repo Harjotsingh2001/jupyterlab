@@ -57,10 +57,10 @@ async function getSpecifier(
       const [, , v1] = a.match(SEMVER_RANGE) ?? [];
       const [, , v2] = b.match(SEMVER_RANGE) ?? [];
 
-      if(v1 && v2 && semver.valid(v1) && semver.valid(v2)){ 
-      return semver.compare(v1, v2);
-    }
-    return semver.compare(v1, v2);
+      if(v1 && v2 && semver.valid(v1) && semver.vaild(v2)) {
+        return semver.compare(v1, v2);
+      }
+      return semver.compare(b);
     });
     currentSpecifier = alternativeSpecifiers.pop()!;
 
@@ -201,6 +201,7 @@ async function handlePackage(
     } else {
       const keys = Object.keys(deps);
       keys.sort((a, b) => a.localeCompare(b));
+
       for (const dep of keys) {
         if (dep.match(name)) {
           const { updated, log } = await handleDependency(
@@ -302,7 +303,3 @@ if (!process.argv.slice(2).length) {
   commander.outputHelp();
   process.exit(1);
 }
-function valid(v2: string) {
-  throw new Error('Function not implemented.');
-}
-
