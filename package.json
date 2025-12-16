@@ -105,6 +105,9 @@
     "watch:packages": "python scripts/watch_packages.py"
   },
   "resolutions": {
+    "glob": "10.5.0",
+    "ip": "2.0.1",
+    "sanitize-html": "2.12.1",
     "@types/react": "^18.0.26",
     "marked": "^16.2.1",
     "react": "^18.2.0",

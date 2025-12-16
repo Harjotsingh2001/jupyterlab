@@ -7,7 +7,7 @@
 import * as path from 'path';
 import * as utils from './utils';
 import packageJson from 'package-json';
-
+import _ from 'lodash';
 import { program as commander } from 'commander';
 import semver from 'semver';
 
@@ -243,7 +243,7 @@ commander
   .action(
     async (name: string | RegExp, version: string = '^latest', args: any) => {
       const basePath = path.resolve(args.path || '.');
-      const pkg = args.regex ? new RegExp(name) : name;
+      const pkg = args.regex ? new RegExp(_.escapeRegExp(name)) : name;
 
       if (args.lerna) {
         const paths = utils.getLernaPaths(basePath).sort();
@@ -263,9 +263,9 @@ commander.on('--help', function () {
 Examples
 --------
 
-  Update the package 'webpack' to a specific version range:
+  Update the package 'mypackage' to a specific version range:
 
-      update-dependency webpack ^4.0.0
+      update-dependency mypackage ^4.0.0
 
   Update all packages to the latest version, with a caret.
   Only update if the update is substantial:
