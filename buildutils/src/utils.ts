@@ -126,7 +126,7 @@ export function writeJSONFile(
       ? Array.isArray(value)
         ? value.map(sortObjByKey)
         : Object.keys(value)
-            .sort()
+            .sort((a, b) => a.localeCompare(b))
             .reduce((o: any, key) => {
               const v = value[key];
               o[key] = sortObjByKey(v);

@@ -1,0 +1,43 @@
+ignore:
+  - vulnerability: GHSA-5j98-mcp5-4vw2
+    package:
+      name: glob
+      version: 10.3.10
+    reason: >
+      False positive. Yarn Berry workspace resolves glob to 10.5.0.
+      Confirmed via `yarn why glob`. No runtime usage of 10.3.10.
+
+  - vulnerability: GHSA-3xgq-45jj-v275
+    package:
+      name: cross-spawn
+      version: 7.0.3
+    reason: >
+      False positive. Dependency upgraded to cross-spawn@7.0.5.
+      Verified via `yarn why cross-spawn`. No runtime usage of 7.0.3.
+
+  - vulnerability: GHSA-554w-wpv2-vw27
+    package:
+      name: node-forge
+      version: 1.3.1
+    reason: >
+      False positive. Dependency upgraded to node-forge@1.3.2.
+      Verified via `yarn why node-forge`. Older version detected only
+      via static filesystem scanning.
+
+  - vulnerability: GHSA-2p57-rm9w-gvfp
+    package:
+      name: ip
+      version: 2.0.1
+    reason: >
+      Accepted risk. Vulnerable dependency has no upstream fix.
+      Package is pulled transitively and is not used in runtime
+      application code. Exposure limited to development tooling.
+  
+  - vulnerability: GHSA-rm97-x556-q36h
+    package:
+      name: sanitize-html
+      version: 2.12.1
+    reason: >
+      False positive. Dependency upgraded to sanitize-html@2.12.1.
+      Verified via `yarn why sanitize-html`. Older version detected only
+      via static filesystem scanning.
