@@ -15,7 +15,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: ⬇️ Install Grype CLI (To Global Path)
+      - name:  Install Grype CLI (To Global Path)
         run: |
           curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sudo sh -s -- -b /usr/local/bin v0.97.1
           grype version # Verify installation
@@ -24,16 +24,16 @@ jobs:
         run: grype . -o table --add-cpes-if-none
 
 
-      - name: 🔎 Run Grype Scan (No Failure)
+      - name:  Run Grype Scan (No Failure)
         run: grype dir:. -o json --file grype-report.json
         
-      - name: 📤 Print Grype Report Content
+      - name:  Print Grype Report Content
         run: |
           echo "--- START GRYPE REPORT ---"
           cat grype-report.json
           echo "--- END GRYPE REPORT ---"
           
-      - name: ⬆️ Upload Grype Report Artifact
+      - name: ⬆ Upload Grype Report Artifact
         uses: actions/upload-artifact@v4
         with:
           name: grype-security-report
