@@ -1,5 +1,5 @@
 # .github/workflows/gitleaks.yaml
-name: 🔐 DevSecOps - Secret Scanner (Gitleaks)
+name:  DevSecOps - Secret Scanner (Gitleaks)
 
 # This workflow will run anytime code is pushed to the main branch
 on:
@@ -20,7 +20,7 @@ jobs:
         with:
           fetch-depth: 0 
           
-      - name: 🔐 Run Gitleaks Scan (OSS SAST)
+      - name:  Run Gitleaks Scan (OSS SAST)
         uses: zricethezav/gitleaks-action@v2
         with:
           # Tells Gitleaks to use the custom YAML configuration file
