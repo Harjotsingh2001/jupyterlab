@@ -1,5 +1,5 @@
 # .github/workflows/grype.yaml
-name: 📦 DevSecOps - Dependency Scan (Grype SCA)
+name:  DevSecOps - Dependency Scan (Grype SCA)
 
 on:
   push:
