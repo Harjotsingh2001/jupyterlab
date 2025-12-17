@@ -6,3 +6,20 @@ ignore:
     reason: >
       False positive. Yarn Berry workspace resolves glob to 10.5.0.
       Confirmed via `yarn why glob`. No runtime usage of 10.3.10.
+
+  - vulnerability: GHSA-3xgq-45jj-v275
+    package:
+      name: cross-spawn
+      version: 7.0.3
+    reason: >
+      False positive. Dependency upgraded to cross-spawn@7.0.5.
+      Verified via `yarn why cross-spawn`. No runtime usage of 7.0.3.
+
+  - vulnerability: GHSA-554w-wpv2-vw27
+    package:
+      name: node-forge
+      version: 1.3.1
+    reason: >
+      False positive. Dependency upgraded to node-forge@1.3.2.
+      Verified via `yarn why node-forge`. Older version detected only
+      via static filesystem scanning.
